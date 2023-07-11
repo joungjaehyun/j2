@@ -37,7 +37,7 @@ public class FileBoardSearchImpl extends QuerydslRepositorySupport implements Fi
 
         
         JPQLQuery<FileBoard> query = from(board);
-        // 특정한 조거만 추출하는 참조
+        // 특정한 조건만 추출하는 참조
         // 참조관계가 없어도 JOIN을 걸수있다.
         query.leftJoin(board.images,boardImage);
 
