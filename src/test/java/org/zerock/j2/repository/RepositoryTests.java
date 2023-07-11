@@ -23,24 +23,24 @@ public class RepositoryTests {
     FileBoardRepository repository;
 
     @Test
-    public void insert(){
+    public void insert() {
 
-        for(int i = 0; i < 100; i++) {
+        for (int i = 0; i < 100; i++) {
             FileBoard fileBoard = FileBoard.builder()
-            .title("aa")
-            .content("aa")
-            .writer("aa")
-            .build();
+                    .title("aa")
+                    .content("aa")
+                    .writer("aa")
+                    .build();
 
             FileBoardImage img1 = FileBoardImage.builder()
-            .uuid(UUID.randomUUID().toString())
-            .fname("aaa.jpg")
-            .build();
+                    .uuid(UUID.randomUUID().toString())
+                    .fname("aaa.jpg")
+                    .build();
 
             FileBoardImage img2 = FileBoardImage.builder()
-            .uuid(UUID.randomUUID().toString())
-            .fname("bbb.jpg")
-            .build();
+                    .uuid(UUID.randomUUID().toString())
+                    .fname("bbb.jpg")
+                    .build();
 
             fileBoard.addImage(img1);
 
@@ -48,9 +48,7 @@ public class RepositoryTests {
 
             repository.save(fileBoard);
 
-        }//end for
-        
-
+        } // end for
 
     }
 
@@ -64,11 +62,10 @@ public class RepositoryTests {
         repository.deleteById(bno);
     }
 
-
     @Test
     @Transactional // ToString exclude 제거시 lazy 에러 발생 => 간단히 해결하는 방법 Transactional
-    public void testRead(){
-        
+    public void testRead() {
+
         Long bno = 13L;
 
         Optional<FileBoard> result = repository.findById(bno);
@@ -84,7 +81,7 @@ public class RepositoryTests {
     // Fetch Type은 항상 LAZY로 기본으로 둬야된다.
     @Test
     @Transactional
-    public void testList(){
+    public void testList() {
 
         Pageable pageable = PageRequest.of(0, 10);
 
@@ -93,24 +90,24 @@ public class RepositoryTests {
         // System.out.println(result);
 
         result.get().forEach(board -> {
-        System.out.println(board);
-        System.out.println(board.getImages());});
+            System.out.println(board);
+            System.out.println(board.getImages());
+        });
     }
+
     @Transactional
     @Test
-    public void testListQuerydsl(){
+    public void testListQuerydsl() {
 
         PageRequestDTO requestDTO = new PageRequestDTO();
-        
-        System.out.println(repository.list(requestDTO));
 
+        System.out.println(repository.list(requestDTO));
 
     }
 
-    
     @Test
-    public void testSelectOne(){
-        
+    public void testSelectOne() {
+
         Long bno = 75L;
 
         FileBoard board = repository.selectOne(bno);
@@ -118,13 +115,38 @@ public class RepositoryTests {
         System.out.println(board);
         System.out.println(board.getImages());
     }
+
     @Transactional
     @Commit
     @Test
-    public void testDelete(){
+    public void testDelete() {
 
         Long bno = 100L;
 
         repository.deleteById(bno);
+    }
+
+    @Transactional
+    @Commit
+    @Test
+    public void testUpdate() {
+
+        Long bno = 20L;
+
+        Optional<FileBoard> result = repository.findById(bno);
+
+        FileBoard board = result.orElseThrow();
+
+        board.cleanImages();
+
+        FileBoardImage img1 = FileBoardImage.builder()
+                .uuid(UUID.randomUUID().toString())
+                .fname("zzz.jpg")
+                .build();
+        
+       board.addImage(img1);
+    
+       repository.save(board);
+
     }
 }

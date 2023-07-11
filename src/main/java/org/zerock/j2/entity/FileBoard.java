@@ -43,7 +43,7 @@ public class FileBoard {
     // N+1 해결 방법 => BacthSize(일괄처리) 이방법도 목록추출은 가능하지만 상세보기일땐 문제가 생긴다.
     // size의 값만큼 1번에 처리한다.
     @BatchSize(size=20)
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name="board")
     @Builder.Default
     private List<FileBoardImage> images = new ArrayList<>(); // 바꿀 수 없다, 지우면 안됨
@@ -54,8 +54,11 @@ public class FileBoard {
         boardImage.changeOrd(images.size());
         // 이미지 추가
         images.add(boardImage);
+    }
 
-
+    // 수정작업용
+    public void cleanImages(){
+        images.clear();
     }
 
 }
