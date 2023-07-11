@@ -1,3 +1,9 @@
+// queryDsl  추가하는 gradle 설정 1
+buildscript {
+    ext {
+        queryDslVersion = "5.0.0"
+    }
+}
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.1.1'
@@ -28,8 +34,36 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	// Querydsl 관련 설정2
+	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta"
+	    annotationProcessor(
+
+            "jakarta.persistence:jakarta.persistence-api",
+
+            "jakarta.annotation:jakarta.annotation-api",
+
+            "com.querydsl:querydsl-apt:${queryDslVersion}:jakarta")
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+// querydsl 설정3
+sourceSets {
+    main {
+        java {
+            srcDirs = ["$projectDir/src/main/java", 
+			"$projectDir/build/generated/sources/annotationProcessor/java/main"]
+        }
+    }
+}
+
+task deleteBuild(type: Delete){
+	delete "$projectDir/build/generated/sources/annotationProcessor/"
+}
+
+compileJava.dependsOn('deleteBuild','clean')
+// compileJava전에  clean작업 해달라고하는것
+// 3버전 전용이지 2버전 용이아니다.
+// compileJava.dependsOn('clean')
+// compileTestJava.dependsOn('clean')
