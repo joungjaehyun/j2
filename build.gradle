@@ -58,12 +58,12 @@ sourceSets {
     }
 }
 
-task deleteBuild(type: Delete){
-	delete "$projectDir/build/generated/sources/annotationProcessor/"
-}
+// task deleteBuild(type: Delete){
+// 	delete "$projectDir/build/generated/sources/annotationProcessor/"
+// }
 
-compileJava.dependsOn('deleteBuild','clean')
+// compileJava.dependsOn('deleteBuild','clean')
 // compileJava전에  clean작업 해달라고하는것
 // 3버전 전용이지 2버전 용이아니다.
-// compileJava.dependsOn('clean')
-// compileTestJava.dependsOn('clean')
+compileJava.dependsOn('clean')
+compileTestJava.dependsOn('clean')

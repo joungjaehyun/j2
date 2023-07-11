@@ -101,7 +101,30 @@ public class RepositoryTests {
     public void testListQuerydsl(){
 
         PageRequestDTO requestDTO = new PageRequestDTO();
-        repository.list(requestDTO);
+        
+        System.out.println(repository.list(requestDTO));
 
+
+    }
+
+    
+    @Test
+    public void testSelectOne(){
+        
+        Long bno = 75L;
+
+        FileBoard board = repository.selectOne(bno);
+
+        System.out.println(board);
+        System.out.println(board.getImages());
+    }
+    @Transactional
+    @Commit
+    @Test
+    public void testDelete(){
+
+        Long bno = 100L;
+
+        repository.deleteById(bno);
     }
 }
