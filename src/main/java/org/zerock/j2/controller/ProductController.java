@@ -25,13 +25,13 @@ import lombok.extern.log4j.Log4j2;
 @RequiredArgsConstructor
 @Log4j2
 public class ProductController {
-    
+
     private final ProductService service;
 
     private final FileUploader uploader;
 
     @GetMapping("list")
-    public PageResponseDTO<ProductListDTO> list(PageRequestDTO pageRequestDTO){
+    public PageResponseDTO<ProductListDTO> list(PageRequestDTO pageRequestDTO) {
 
         log.info("-------------------------------");
         log.info((pageRequestDTO));
@@ -40,13 +40,13 @@ public class ProductController {
     }
 
     @PostMapping("")
-    public Map<String, Long> register(ProductDTO productDTO){
-        
+    public Map<String, Long> register(ProductDTO productDTO) {
+
         log.info(productDTO);
-        
-        List<String> fileNames=  uploader.uploadFiles(productDTO.getFiles(),true);
+
+        List<String> fileNames = uploader.uploadFiles(productDTO.getFiles(), true);
         productDTO.setImages(fileNames);
-        
+
         Long pno = service.register(productDTO);
 
         return Map.of("result", pno);

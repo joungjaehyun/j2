@@ -16,17 +16,18 @@ public class PageRequestDTO {
     private String type, keyword;
 
     public PageRequestDTO() {
-        this(1,10);
+        this(1, 10);
     }
 
     public PageRequestDTO(int page, int size) {
-        this(page,size,null, null);
-        
+        this(page, size, null, null);
+
     }
-    public PageRequestDTO(int page, int size, String type, String keyword){
-    
-        this.page = page <=0 ? 1: page;
-        this.size = size <0 || size >= 100? 10 : size;
+
+    public PageRequestDTO(int page, int size, String type, String keyword) {
+
+        this.page = page <= 0 ? 1 : page;
+        this.size = size < 0 || size >= 100 ? 10 : size;
 
         this.type = type;
         this.keyword = keyword;
