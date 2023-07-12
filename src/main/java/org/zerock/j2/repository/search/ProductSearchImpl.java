@@ -12,6 +12,7 @@ import org.zerock.j2.dto.ProductListDTO;
 import org.zerock.j2.entity.Product;
 import org.zerock.j2.entity.QProduct;
 import org.zerock.j2.entity.QProductImage;
+import org.zerock.j2.entity.QProductReview;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
@@ -28,33 +29,68 @@ public class ProductSearchImpl extends QuerydslRepositorySupport implements Prod
     @Override
     public PageResponseDTO<ProductListDTO> list(PageRequestDTO pageRequestDTO) {
 
-            QProduct product = QProduct.product;
-            QProductImage productImage = QProductImage.productImage;
+        QProduct product = QProduct.product;
+        QProductImage productImage = QProductImage.productImage;
 
-            JPQLQuery<Product> query = from(product);
-            query.leftJoin(product.images, productImage);
+        JPQLQuery<Product> query = from(product);
+        query.leftJoin(product.images, productImage);
 
-            query.where(productImage.ord.eq(0));
+        query.where(productImage.ord.eq(0));
 
-            int pageNum = pageRequestDTO.getPage() <= 0 ? 0: pageRequestDTO.getPage()-1;
+        int pageNum = pageRequestDTO.getPage() <= 0 ? 0 : pageRequestDTO.getPage() - 1;
 
-            Pageable pageable =
-             PageRequest.of(pageNum,pageRequestDTO.getSize(),
-             Sort.by("pno").descending());        
+        Pageable pageable = PageRequest.of(pageNum, pageRequestDTO.getSize(),
+                Sort.by("pno").descending());
 
-             this.getQuerydsl().applyPagination(pageable, query);
+        this.getQuerydsl().applyPagination(pageable, query);
 
-            JPQLQuery<ProductListDTO>dtoQuery = 
-            query.select(
+        JPQLQuery<ProductListDTO> dtoQuery = query.select(
                 Projections.bean(ProductListDTO.class,
-                 product.pno, product.pname,
-                 product.price,
-                 productImage.fname)
-            );
-            List<ProductListDTO> dtoList = dtoQuery.fetch();
-            long totalCount = dtoQuery.fetchCount();
+                        product.pno, product.pname,
+                        product.price,
+                        productImage.fname));
+        List<ProductListDTO> dtoList = dtoQuery.fetch();
+        long totalCount = dtoQuery.fetchCount();
 
-            return new PageResponseDTO<>(dtoList, totalCount, pageRequestDTO);
+        return new PageResponseDTO<>(dtoList, totalCount, pageRequestDTO);
     }
-    
+
+    @Override
+    public PageResponseDTO<ProductListDTO> listWithReview(PageRequestDTO pageRequestDTO) {
+
+        QProduct product = QProduct.product;
+        QProductImage productImage = QProductImage.productImage;
+        QProductReview review = QProductReview.productReview;
+
+        JPQLQuery<Product> query = from(product);
+        query.leftJoin(product.images, productImage);
+        query.leftJoin(review).on(review.product.eq(product));
+
+        query.where(productImage.ord.eq(0));
+
+        int pageNum = pageRequestDTO.getPage() <= 0 ? 0 : pageRequestDTO.getPage() - 1;
+
+        Pageable pageable = PageRequest.of(pageNum, pageRequestDTO.getSize(),
+                Sort.by("pno").descending());
+
+        this.getQuerydsl().applyPagination(pageable, query);
+        // 에러가 나오는데 grouping 되지않는애가 있기때문
+        // 해결책 group함수를 통해서 얘를 그룹함수에 영향을 받게한다.
+        // 또는 그룹되지않는 영역을 그룹화 한다.
+        query.groupBy(product);
+
+        JPQLQuery<ProductListDTO> dtoQuery = query.select(
+                Projections.bean(ProductListDTO.class,
+                        product.pno, product.pname,
+                        product.price,
+                        productImage.fname.min().as("fname"),
+                        review.score.avg().as("reviewAvg"),
+                        review.count().as("reviewCnt")
+                        ));
+        List<ProductListDTO> dtoList = dtoQuery.fetch();
+        long totalCount = dtoQuery.fetchCount();
+
+        return new PageResponseDTO<>(dtoList, totalCount, pageRequestDTO);
+    }
+
 }
