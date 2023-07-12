@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
+import org.zerock.j2.dto.PageRequestDTO;
+import org.zerock.j2.dto.PageResponseDTO;
+import org.zerock.j2.dto.ProductListDTO;
 import org.zerock.j2.entity.Product;
 
 import jakarta.transaction.Transactional;
@@ -17,23 +20,24 @@ public class ProductTests {
     ProductRepository repo;
 
     // Insert Test
-    @Test
-    public void testInsert(){
-        
-        Product product = Product.builder()
-        .pname("Test")
-        .pdesc("Test")
-        .writer("user00")
-        .price(4000)
-        .build();
+    // @Test
+    // public void testInsert(){
+    //     for(int i =0; i < 200; i++){
+    //     Product product = Product.builder()
+    //     .pname("Test" +i)
+    //     .pdesc("Test" + i)
+    //     .writer("user" + i)
+    //     .price(4000)
+    //     .build();
 
-        product.addImage(UUID.randomUUID().toString()+ "_aaa.jpg");
-        product.addImage(UUID.randomUUID().toString()+"_bbb.jpg0");
-        product.addImage(UUID.randomUUID().toString()+"_ccc.jpg");
+    //     product.addImage(UUID.randomUUID().toString()+ "_aaa.jpg");
+    //     product.addImage(UUID.randomUUID().toString()+"_bbb.jpg");
+    //     product.addImage(UUID.randomUUID().toString()+"_ccc.jpg");
 
-        repo.save(product);
+    //     repo.save(product);
+    //     }//end for
 
-    }
+    // }
 
     @Test
     @Transactional // 안걸리면 lazy exception이 걸린다.
@@ -81,6 +85,20 @@ public class ProductTests {
         
          repo.save(product);
          
+    }
+    // 동적 쿼리 테스트
+    @Test
+    public void testList1(){
+
+        PageRequestDTO requestDTO = new PageRequestDTO();
+
+        PageResponseDTO<ProductListDTO> result = repo.list(requestDTO);
+
+       for (ProductListDTO dto : result.getDtoList()) {
+        
+        System.out.println(dto);
+       } 
+        
     }
 
 }

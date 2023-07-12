@@ -5,9 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.zerock.j2.entity.Product;
+import org.zerock.j2.repository.search.ProductSearch;
 
 
-public interface ProductRepository extends JpaRepository<Product, Long> {
+public interface ProductRepository extends JpaRepository<Product, Long>, ProductSearch {
     
     // 상세보기용을 위한 JPQL 작업
     @EntityGraph(attributePaths = "images")
