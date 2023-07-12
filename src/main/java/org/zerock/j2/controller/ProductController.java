@@ -1,6 +1,8 @@
 package org.zerock.j2.controller;
 
+import java.util.List;
 import java.util.Map;
+
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,7 @@ import org.zerock.j2.dto.PageResponseDTO;
 import org.zerock.j2.dto.ProductDTO;
 import org.zerock.j2.dto.ProductListDTO;
 import org.zerock.j2.service.ProductService;
+import org.zerock.j2.util.FileUploader;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -24,6 +27,8 @@ import lombok.extern.log4j.Log4j2;
 public class ProductController {
     
     private final ProductService service;
+
+    private final FileUploader uploader;
 
     @GetMapping("list")
     public PageResponseDTO<ProductListDTO> list(PageRequestDTO pageRequestDTO){
@@ -39,7 +44,12 @@ public class ProductController {
         
         log.info(productDTO);
         
-        return Map.of("result", 123L);
+        List<String> fileNames=  uploader.uploadFiles(productDTO.getFiles(),true);
+        productDTO.setImages(fileNames);
+        
+        Long pno = service.register(productDTO);
+
+        return Map.of("result", pno);
 
     }
 

@@ -18,6 +18,7 @@ public class ProductDTO {
     private String pdesc;
     private int price;
 
+    // DB 처리용
     private List<String> images;
 
     // 등록/수정 업로드된  파일 데이터를 수집하는 용도
