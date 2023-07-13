@@ -4,11 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.zerock.j2.dto.PageRequestDTO;
 import org.zerock.j2.dto.PageResponseDTO;
 import org.zerock.j2.dto.ProductDTO;
@@ -37,6 +33,13 @@ public class ProductController {
         log.info((pageRequestDTO));
 
         return service.list(pageRequestDTO);
+    }
+    @GetMapping("{pno}")
+    public  ProductDTO getOne(@PathVariable("pno") Long pno){
+
+        log.info("PNO..............." + pno);
+
+        return service.readOne(pno);
     }
 
     @PostMapping("")

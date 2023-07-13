@@ -2,13 +2,14 @@ package org.zerock.j2.dto;
 
 import java.util.List;
 
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import lombok.Data;
-import lombok.ToString;
 
 @Data
 @ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductDTO {
 
     // 기본적으로 Entity와 맞춰두고 variation을 준다
