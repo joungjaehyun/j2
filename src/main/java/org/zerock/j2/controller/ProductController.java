@@ -68,6 +68,8 @@ public class ProductController {
 
             List<String> oldFileNames = productDTO.getImages();
 
+
+
             uploadFileNames.forEach(fname -> oldFileNames.add(fname));
         }
         log.info("After............");
