@@ -12,7 +12,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, Product
     
     // 상세보기용을 위한 JPQL 작업
     @EntityGraph(attributePaths = "images")
-    @Query("select p from Product p where p.pno = :pno ")
+    @Query("select p from Product p where p.delFlag = false and p.pno = :pno ")
     Product selectOne(@Param("pno")Long pno);
 
 }

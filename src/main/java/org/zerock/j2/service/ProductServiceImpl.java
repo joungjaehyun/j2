@@ -66,6 +66,10 @@ public class ProductServiceImpl implements ProductService {
         // 삭제전 조회
         Product product =productRepository.selectOne(pno);
 
+        product.changeDel(true);
+
+        productRepository.save(product);
+
         List<String> fileNames =
                 product.getImages().stream().map(pi -> pi.getFname()).collect(Collectors.toList());
 
