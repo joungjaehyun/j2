@@ -114,6 +114,12 @@ public class ProductServiceImpl implements ProductService {
         // save()
         productRepository.save(product);
 
+        // 기존 파일들중에  productDTO.getImages() 포함안된 파일들 찾기
+        List<String> newFiles = productDTO.getImages();
+        List<String> wantDeleteFiles = oldFileNames.stream()
+                .filter(f->newFiles.indexOf(f)== -1)
+                .collect(Collectors.toList());
+        fileUploader.removeFiles(wantDeleteFiles);
     }
 
 

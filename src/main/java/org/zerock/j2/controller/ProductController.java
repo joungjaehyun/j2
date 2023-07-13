@@ -63,12 +63,13 @@ public class ProductController {
         log.info("----------------modify-----------------");
         log.info(productDTO);
         // 기존 파일 및 업로드된 파일까지 추가하는 배열
-        List<String> uploadFileNames = uploader.uploadFiles(productDTO.getFiles(),true);
+        if(productDTO.getFiles() != null && productDTO.getFiles().size()>0){
+            List<String> uploadFileNames = uploader.uploadFiles(productDTO.getFiles(), true);
 
-        List<String> oldFileNames = productDTO.getImages();
+            List<String> oldFileNames = productDTO.getImages();
 
-        uploadFileNames.forEach(fname -> oldFileNames.add(fname));
-
+            uploadFileNames.forEach(fname -> oldFileNames.add(fname));
+        }
         log.info("After............");
         log.info(productDTO);
 
