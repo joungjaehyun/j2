@@ -55,5 +55,12 @@ public class ProductController {
         return Map.of("result", pno);
 
     }
+    @DeleteMapping("{pno}")
+    public Map<String, Long> delete(@PathVariable("pno") Long pno){
+
+        log.info("PNO..............." + pno);
+        service.remove(pno);
+        return Map.of("result",pno);
+    }
 
 }

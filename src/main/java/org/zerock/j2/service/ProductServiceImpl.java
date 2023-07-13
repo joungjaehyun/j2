@@ -9,7 +9,9 @@ import org.zerock.j2.entity.Product;
 import org.zerock.j2.repository.ProductRepository;
 
 import lombok.RequiredArgsConstructor;
+import org.zerock.j2.util.FileUploader;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,6 +20,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
 
+    private final FileUploader fileUploader;
     @Override
     public PageResponseDTO<ProductListDTO> list(PageRequestDTO requestDTO) {
         
@@ -56,6 +59,18 @@ public class ProductServiceImpl implements ProductService {
                .build();
 
        return dto;
+    }
+
+    @Override
+    public void remove(Long pno) {
+        // 삭제전 조회
+        Product product =productRepository.selectOne(pno);
+
+        List<String> fileNames =
+                product.getImages().stream().map(pi -> pi.getFname()).collect(Collectors.toList());
+
+        fileUploader.removeFiles(fileNames);
+
     }
 
 
