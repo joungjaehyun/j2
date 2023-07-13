@@ -16,5 +16,7 @@ public interface ProductService {
 
     ProductDTO readOne(Long pno);
     void remove(Long pno);
+
+    void modify(ProductDTO productDTO);
     
 }
