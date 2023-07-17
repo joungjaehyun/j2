@@ -16,6 +16,8 @@ public class MemberServiceImpl implements MemberService{
 
     private final MemberRepository memberRepository;
 
+
+
     // 로그인 실패시 실행되는 예외처리
     public static final class  MemberLoginException extends RuntimeException{
 
@@ -37,6 +39,13 @@ public class MemberServiceImpl implements MemberService{
             if( !member.getPw().equals(pw)){
                 throw  new MemberLoginException("Password Incorrect");
             }
+            //패스워드는 안나가게 해야되므로 Service에서 처리해준다.
+            memberDTO = MemberDTO.builder()
+                    .email(member.getEmail())
+                    .pw("")
+                    .nickname(member.getNickname())
+                    .admin(member.isAdmin())
+                    .build();
 
         }catch(Exception e){
             throw  new MemberLoginException(e.getMessage());
