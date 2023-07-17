@@ -11,6 +11,8 @@ public interface MemberCartService {
 
     List<MemberCartDTO> addCart(MemberCartDTO memberCartDTO);
 
+    List<MemberCartDTO> getCart(String email);
+
     default MemberCart dtoToEntity(MemberCartDTO dto) {
 
         MemberCart entity = MemberCart.builder()

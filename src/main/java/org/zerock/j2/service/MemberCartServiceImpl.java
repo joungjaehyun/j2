@@ -27,4 +27,12 @@ public class MemberCartServiceImpl implements MemberCartService{
 
         return cartList.stream().map(entity -> entityToDTO(entity)).collect(Collectors.toList());
     }
+
+    @Override
+    public List<MemberCartDTO> getCart(String email) {
+
+        List<MemberCart> cartList =cartRepository.selectCart(email);
+
+        return cartList.stream().map(entity -> entityToDTO(entity)).collect(Collectors.toList());
+    }
 }

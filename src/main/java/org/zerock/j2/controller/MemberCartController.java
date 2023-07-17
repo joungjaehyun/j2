@@ -24,4 +24,10 @@ public class MemberCartController {
 
         return  cartService.addCart(memberCartDTO);
     }
+
+    @GetMapping("{email}")
+    public List<MemberCartDTO> get(@PathVariable("email") String email){
+
+        return cartService.getCart(email);
+    }
 }
