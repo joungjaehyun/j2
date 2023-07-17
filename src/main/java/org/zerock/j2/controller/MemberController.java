@@ -20,6 +20,12 @@ public class MemberController {
 
         log.info("Parameter: " + memberDTO);
 
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         MemberDTO result = memberService.login(
                 memberDTO.getEmail(),
                 memberDTO.getPw()
