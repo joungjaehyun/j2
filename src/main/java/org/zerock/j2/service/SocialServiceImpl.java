@@ -70,8 +70,8 @@ public class SocialServiceImpl implements  SocialService{
         log.info("-----------------------------------");
         log.info(response);
 
-        LinkedHashMap<String,String> bodayMap = response.getBody();
-        accessToken = bodayMap.get("access_token");
+        LinkedHashMap<String,String> bodyMap = response.getBody();
+        accessToken = bodyMap.get("access_token");
 
         log.info("Access Token: " + accessToken);
 
