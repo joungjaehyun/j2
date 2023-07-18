@@ -53,4 +53,24 @@ public class MemberServiceImpl implements MemberService{
 
         return memberDTO;
     }
+
+    @Override
+    public MemberDTO getMemberWithEmail(String email) {
+
+        Optional<Member> result = memberRepository.findById(email);
+
+        if(result.isPresent()){
+
+            Member member = result.get();
+
+            MemberDTO dto = MemberDTO.builder()
+                    .email(member.getEmail())
+                    .nickname(member.getNickname())
+                    .admin(member.isAdmin())
+                    .build();
+            return dto;
+        }
+
+        return null;
+    }
 }
