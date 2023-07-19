@@ -24,8 +24,8 @@ public class JWTUtil {
     public String generate(Map<String, Object> claimMap, int min){
         
         // header 생성
-        Map<String, Object> hearders = new HashMap<>();
-        hearders.put("typ","JWT");
+        Map<String, Object> headers = new HashMap<>();
+        headers.put("typ","JWT");
 
         //claims 생성
         Map<String, Object>claims = new HashMap<>();
@@ -38,7 +38,7 @@ public class JWTUtil {
 
         }
         String jwtStr = Jwts.builder()
-                .setHeader(hearders)
+                .setHeader(headers)
                 .setClaims(claims)
                 .setIssuedAt(Date.from(ZonedDateTime.now().toInstant()))
                 .setExpiration(
